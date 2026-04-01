@@ -17,11 +17,11 @@ class IIPooled
 
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Pooled Object")
-	void OnSpawn();
+	void OnSpawn(AActor* instigators);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Pooled Object")
 	void Lifetime(float Time, UActorPool* actorPool);
 	
-	virtual void OnSpawn_Implementation();
+	virtual void OnSpawn_Implementation(AActor* instigator);
 	virtual void Lifetime_Implementation(float Time, UActorPool* ActorPool);
 };

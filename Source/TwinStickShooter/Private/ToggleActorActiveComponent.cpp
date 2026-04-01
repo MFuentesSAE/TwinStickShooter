@@ -8,7 +8,7 @@ UToggleActorActiveComponent::UToggleActorActiveComponent()
 	actor = GetOwner();
 }
 
-void UToggleActorActiveComponent::ToggleActorActive(bool active)
+void UToggleActorActiveComponent::SetActorActive(bool active)
 {
 	if (actor == nullptr)
 	{
@@ -19,6 +19,10 @@ void UToggleActorActiveComponent::ToggleActorActive(bool active)
 	actor->SetActorTickEnabled(active);
 	actor->SetActorEnableCollision(active);
 	
+}
+
+void UToggleActorActiveComponent::Naco()
+{
 }
 
 void UToggleActorActiveComponent::BeginPlay()

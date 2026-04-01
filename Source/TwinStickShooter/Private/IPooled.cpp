@@ -1,6 +1,6 @@
 #include "IPooled.h"
 
-void IIPooled::OnSpawn_Implementation()
+void IIPooled::OnSpawn_Implementation(AActor* instigator)
 {
 }
 

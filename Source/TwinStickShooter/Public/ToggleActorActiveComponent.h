@@ -17,7 +17,10 @@ public:
 	UToggleActorActiveComponent();
 
 	UFUNCTION(BlueprintCallable)
-	void ToggleActorActive(bool active);
+	void SetActorActive(bool active);
+
+	UFUNCTION(BlueprintCallable)
+	void Naco();
 	
 
 protected:
