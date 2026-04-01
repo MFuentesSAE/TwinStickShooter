@@ -13,7 +13,6 @@ class TWINSTICKSHOOTER_API UActorPool : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UActorPool();
 
 	UPROPERTY(EditAnywhere)
@@ -26,15 +25,20 @@ public:
 	TSubclassOf<AActor> ActorTemplate;
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 	virtual void ToggleActive(AActor* actor, bool active);
-	AActor* FistAvailableActor();
+	AActor* FindFistAvailableActor();
 
-public:	
+public:
+	UFUNCTION(BlueprintCallable)
 	AActor* InstacePoolActor(TSubclassOf<AActor> actorReference);
-	//AActor* InstacePoolActor(TSubclassOf<AActor> actorReference, FVector spawnLocation);
 
+	UFUNCTION(BlueprintCallable)
 	AActor* GetActorFromPool();
+
+	UFUNCTION(BlueprintCallable)
+	AActor* GetActorFromPoolSetPosition(FVector position);
+
+	UFUNCTION(BlueprintCallable)
 	void ReturnActorToPool(AActor* actorToReturn);	
 };

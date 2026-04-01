@@ -1,20 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "ActorPool.h"
 
-// Sets default values for this component's properties
+#include "ToggleActorActiveComponent.h"
+
 UActorPool::UActorPool()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
-	// ...
 }
 
 
-// Called when the game starts
 void UActorPool::BeginPlay()
 {
 	Super::BeginPlay();
@@ -32,28 +26,37 @@ void UActorPool::BeginPlay()
 
 void UActorPool::ToggleActive(AActor* actor, bool active)
 {
-	actor->SetActorTickEnabled(false);
-	actor->SetHidden(true);
-	actor->SetActorEnableCollision(false);
+	actor->SetActorHiddenInGame(!active);
+	actor->SetActorTickEnabled(active);
+	actor->SetActorEnableCollision(active);
 }
 
-AActor* UActorPool::FistAvailableActor()
+AActor* UActorPool::FindFistAvailableActor()
 {
 	for (AActor* actor : actorPool)
 	{
-		if (!actor->IsHidden())
+		if (actor != nullptr && actor->IsHidden())
 		{
 			return actor;
 		}
 	}
 
-	//Instance a new actor if an active one is not found
+	//Instance a new actor if all actors are active
 	return InstacePoolActor(ActorTemplate);
 }
 
 AActor* UActorPool::GetActorFromPool()
 {
-	return FistAvailableActor();
+	AActor* actor = FindFistAvailableActor();
+	ToggleActive(actor, true);
+	return actor;
+}
+
+AActor* UActorPool::GetActorFromPoolSetPosition(FVector position)
+{
+	AActor* actor = GetActorFromPool();
+	actor->SetActorLocation(position);
+	return actor;
 }
 
 void UActorPool::ReturnActorToPool(AActor* actorToReturn)
@@ -70,7 +73,7 @@ void UActorPool::ReturnActorToPool(AActor* actorToReturn)
 AActor* UActorPool::InstacePoolActor(TSubclassOf<AActor> actorReference)
 {
 	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AActor* actor = GetWorld()->SpawnActor<AActor>(actorReference, SpawnInfo);
 
 	if (actor == nullptr)
