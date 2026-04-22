@@ -17,7 +17,7 @@ public:
 	UActorPool();
 
 	UPROPERTY(EditAnywhere);
-	int defaultSize = 10; //tamaño inicial del pool
+	int defaultSize = 10; //tamaÃ±o inicial del pool
 
 	UPROPERTY(EditAnywhere);
 	TArray<AActor*> actorPool; //lista
@@ -29,9 +29,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	AActor* InstancePoolActor(TSubclassOf<AActor> actorReference); //función para instancear actores
+	AActor* InstancePoolActor(TSubclassOf<AActor> actorReference); //funciÃ³n para instancear actores
 	AActor* FindFirstAvailableActor(); //Regresa el primer actor desactivado que encuentre.
-	void HideActor(AActor* actorToHide);
+	void HideActor(AActor* actorToHide, bool isHidden);
 
 public:	
 	// Called every frame

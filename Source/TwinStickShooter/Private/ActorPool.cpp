@@ -44,21 +44,31 @@ AActor* UActorPool::InstancePoolActor(TSubclassOf<AActor> actorReference)
 	}
 
 	actorPool.Add(actor);
-	HideActor(actor);
+	HideActor(actor, true);
 	return actor;
 
 }
 
 AActor* UActorPool::FindFirstAvailableActor()
 {
-	return nullptr;
+	for (AActor* actor : actorPool)
+	{
+		if (actor != nullptr && actor->IsHidden())
+		{
+			UE_LOG(LogTemp, Display, TEXT("Actor Found"));	
+			return actor;
+		}
+	}
+
+	UE_LOG(LogTemp, Display, TEXT("Actor Not Found, Creating New One"));	
+	return InstancePoolActor(actorTemplate);
 }
 
-void UActorPool::HideActor(AActor* actorToHide)
+void UActorPool::HideActor(AActor* actorToHide, bool isHidden)
 {
-	actorToHide->SetActorHiddenInGame(true);
-	actorToHide->SetActorTickEnabled(false);
-	actorToHide->SetActorEnableCollision(false);
+	actorToHide->SetActorHiddenInGame(isHidden);
+	actorToHide->SetActorTickEnabled(!isHidden);
+	actorToHide->SetActorEnableCollision(!isHidden);
 
 }
 
@@ -73,6 +83,14 @@ void UActorPool::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 
 AActor* UActorPool::GetActorFromPool()
 {
+	AActor* actorFound = FindFirstAvailableActor();
+
+	if (actorFound != nullptr)
+	{
+		HideActor(actorFound, false);
+		return actorFound;
+	}
+
 	return nullptr;
 }
 
